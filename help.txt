@@ -1,0 +1,5 @@
+Список команд:
+/y /year - information about years
+/d /date - information about dates
+/n /number - information about numbers
+/t /trivia - information about trivia numbers
