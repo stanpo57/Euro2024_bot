@@ -1,8 +1,4 @@
 import re
-
-# from predicts import predict
-
-
 # from pprint import pprint
 
 
@@ -223,14 +219,14 @@ def matches_to_bot(matches):    # формирование групповых р
         d = l['datetime'].rjust(13)
         h = l['hosts'].ljust(10)
         g = l['guests'].ljust(10)
-        inf = l['info']
+        # inf = l['info']
         if l['played']:
             h_g = str(l['goals_hosts']).rjust(2)
             g_g = str(l['goals_guests']).rjust(2)
         else:
             h_g = ' -'
             g_g = ' -'
-        msg += f"\n{id} {d} {h} - {g} {h_g} : {g_g}" # {inf}
+        msg += f"\n{id} {d} {h} - {g} {h_g} : {g_g}"    # {inf}
 
     msg_to_file(msg, "txt_matches.txt")
     return msg
@@ -246,6 +242,7 @@ def matches_group_to_bot(matches, group):   # формирование резу�
             h = l['hosts'].rjust(10)
             g = l['guests'].ljust(10)
             inf = l['info']
+
             if l['played']:
                 h_g = str(l['goals_hosts']).rjust(2)
                 g_g = str(l['goals_guests']).rjust(2)
@@ -291,7 +288,6 @@ def table_group_to_bot(teams, group):   # формирование таблиц 
     msg += f'\n  команды    и  в  н  п  мз  мп  о'
 
     for s in teams:
-        # print(s)
         if s[1][0] == group:
             pl = s[1][9]
             te = s[0].ljust(10)
@@ -406,6 +402,7 @@ def finalists_from_finals(matches_final, final):    # выборка списк�
 
 def final_4_formation(finalists, matches_final):    # формирование пар участников 1/4 финала
     for l in matches_final:
+
         if l['final'] == '1/4':
             try:
                 l.update({'hosts': finalists[int(l['hosts'])], "guests": finalists[int(l['guests'])]})
@@ -417,6 +414,7 @@ def final_4_formation(finalists, matches_final):    # формирование �
 
 def final_2_formation(finalists, matches_final):    # формирование пар участников 1/2 финала
     for l in matches_final:
+
         if l['final'] == '1/2':
             try:
                 l.update({'hosts': finalists[int(l['hosts'])], "guests": finalists[int(l['guests'])]})
@@ -428,6 +426,7 @@ def final_2_formation(finalists, matches_final):    # формирование �
 
 def final_1_formation(finalists, matches_final):    # формирование пары участников финала
     for l in matches_final:
+
         if l['final'] == '1/1':
             try:
                 l.update({'hosts': finalists[int(l['hosts'])], "guests": finalists[int(l['guests'])]})
@@ -440,6 +439,7 @@ def final_1_formation(finalists, matches_final):    # формирование �
 def itog_formation(matches_final):  # формирование итоговой таблицы
     teams = []
     for l in matches_final:
+
         if l['final'] == "1/1":
             g_h = l['goals_hosts'] + l['goals_hosts_extratime'] + l['goals_hosts_penalty']
             g_g = l['goals_guests'] + l['goals_guests_extratime'] + l['goals_guests_penalty']
@@ -458,6 +458,7 @@ def itog_formation(matches_final):  # формирование итоговой 
                 teams.append(l['guests'])
             else:
                 teams.append(l['hosts'])
+
     return teams
 
 

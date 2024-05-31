@@ -78,6 +78,7 @@ def penalty_predict():  # прогноз пробития пенальти
     while goals[0] == goals[1]:
         goals[0] += randint(0, 1)
         goals[1] += randint(0, 1)
+
     return goals
 
 
@@ -156,8 +157,8 @@ def predict(n):     # прогноз
     ]
 
 
-new_predict = predict(5)
-print(new_predict[0])
-print(new_predict[1])
-print(new_predict[8])
-print(new_predict[9])
+# new_predict = predict(5)
+# print(new_predict[0])
+# print(new_predict[1])
+# print(new_predict[8])
+# print(new_predict[9])

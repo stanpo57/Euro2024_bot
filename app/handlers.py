@@ -1,7 +1,7 @@
 from aiogram import F, Router, types
 from aiogram.types import Message, CallbackQuery
 from aiogram.filters import CommandStart, Command
-from random import randint
+# from random import randint
 
 import app.keyboards as kb
 
@@ -196,18 +196,18 @@ async def predicts(message: Message):
     msg_matches_predict = eu.matches_to_bot(matches_predict) + eu.separator(33)
     group_itog_predict = eu.tables_sort(teams_predict)
     msg_tables_predict = eu.tables_to_bot(group_itog_predict) + eu.separator(33)
-    msg_group1_predict = (eu.matches_group_to_bot(matches_predict, 1) +
-                          eu.table_group_to_bot(group_itog_predict, 1) + eu.separator(33))
-    msg_group2_predict = (eu.matches_group_to_bot(matches_predict, 2) +
-                          eu.table_group_to_bot(group_itog_predict, 2) + eu.separator(33))
-    msg_group3_predict = (eu.matches_group_to_bot(matches_predict, 3) +
-                          eu.table_group_to_bot(group_itog_predict, 3) + eu.separator(33))
-    msg_group4_predict = (eu.matches_group_to_bot(matches_predict, 4) +
-                          eu.table_group_to_bot(group_itog_predict, 4) + eu.separator(33))
-    msg_group5_predict = (eu.matches_group_to_bot(matches_predict, 5) +
-                          eu.table_group_to_bot(group_itog_predict, 5) + eu.separator(33))
-    msg_group6_predict = (eu.matches_group_to_bot(matches_predict, 5) +
-                          eu.table_group_to_bot(group_itog_predict, 6) + eu.separator(33))
+    # msg_group1_predict = (eu.matches_group_to_bot(matches_predict, 1) +
+    #                       eu.table_group_to_bot(group_itog_predict, 1) + eu.separator(33))
+    # msg_group2_predict = (eu.matches_group_to_bot(matches_predict, 2) +
+    #                       eu.table_group_to_bot(group_itog_predict, 2) + eu.separator(33))
+    # msg_group3_predict = (eu.matches_group_to_bot(matches_predict, 3) +
+    #                       eu.table_group_to_bot(group_itog_predict, 3) + eu.separator(33))
+    # msg_group4_predict = (eu.matches_group_to_bot(matches_predict, 4) +
+    #                       eu.table_group_to_bot(group_itog_predict, 4) + eu.separator(33))
+    # msg_group5_predict = (eu.matches_group_to_bot(matches_predict, 5) +
+    #                       eu.table_group_to_bot(group_itog_predict, 5) + eu.separator(33))
+    # msg_group6_predict = (eu.matches_group_to_bot(matches_predict, 5) +
+    #                       eu.table_group_to_bot(group_itog_predict, 6) + eu.separator(33))
     finalists_predict = eu.finalists_from_group(group_itog_predict)
     # 1/8 финала
     matches_final_predict = eu.final_8_formation(finalists_predict, matches_final_predict)
@@ -291,7 +291,3 @@ async def caps(callback: CallbackQuery):
     await callback.message.answer("You have selected the caps category")
     
     '''
-
-
-
-
