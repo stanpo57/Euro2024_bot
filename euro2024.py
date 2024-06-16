@@ -107,8 +107,8 @@ def ratings_to_bot(ratings, n:int, l:int):     # формирование спи
     for i in range(n-50, min(len(ratings_sorted), n)):
         id = str(i+1).rjust(3)
         t = str(ratings_sorted[i][0]).ljust(l)
-        r = ratings_sorted[i][1]
-        msg += f"\n{id} {t} - {r}"
+        r = round(ratings_sorted[i][1])
+        msg += f"\n{id} {t}-{r}"
 
     return msg
 
@@ -217,16 +217,16 @@ def matches_to_bot(matches):    # формирование групповых р
     for l in matches:
         id =str(l['id']).rjust(2)
         d = l['datetime'].rjust(13)
-        h = l['hosts'].ljust(10)
+        h = l['hosts'].rjust(10)
         g = l['guests'].ljust(10)
         # inf = l['info']
         if l['played']:
             h_g = str(l['goals_hosts']).rjust(2)
-            g_g = str(l['goals_guests']).rjust(2)
+            g_g = str(l['goals_guests']).ljust(2)
         else:
             h_g = ' -'
-            g_g = ' -'
-        msg += f"\n{id} {d} {h} - {g} {h_g} : {g_g}"    # {inf}
+            g_g = '-'
+        msg += f"\n{id}  {d} \n{h} -{g} {h_g}:{g_g}"    # {inf}
 
     msg_to_file(msg, "txt_matches.txt")
     return msg
@@ -245,12 +245,13 @@ def matches_group_to_bot(matches, group):   # формирование резу�
 
             if l['played']:
                 h_g = str(l['goals_hosts']).rjust(2)
-                g_g = str(l['goals_guests']).rjust(2)
+                g_g = str(l['goals_guests']).ljust(2)
             else:
                 h_g = ' -'
-                g_g = ' -'
+                g_g = '-'
             # msg += f"\n{id} {d} {h} - {g} {h_g} : {g_g}  {inf}"
-            msg += f"\n {d} {h} {h_g} : {g_g} {g}"
+            # msg += f"\n {d} \n{h} {h_g} : {g_g} {g}"
+            msg += f"\n{id}  {d} \n{h} -{g} {h_g}:{g_g}"
 
     msg_to_file(msg, f"txt_matches_gr{str(group)}.txt")
 
@@ -264,7 +265,7 @@ def tables_to_bot(teams):   # формирование таблиц группо
     for s in teams:
         if i % 4 == 0:
             msg += f'\n\n  Группа {chr(int(i / 4) + 65)}'
-            msg += f'\n  команды    и  в  н  п  мз  мп  о'
+            msg += f'\n  команды    и в н п мз мп о'
         pl = s[1][9]
         te = s[0].ljust(10)
         gm = s[1][1]
@@ -274,7 +275,7 @@ def tables_to_bot(teams):   # формирование таблиц группо
         g_wi = str(s[1][5]).ljust(2)
         g_lo = str(s[1][6]).ljust(2)
         sc = s[1][7]
-        msg += f'\n{pl} {te} {gm}  {wi}  {no}  {lo}  {g_wi}  {g_lo}  {sc}'
+        msg += f'\n{pl} {te} {gm} {wi} {no} {lo} {g_wi} {g_lo} {sc}'
         i += 1
 
     msg_to_file(msg, "txt_tables.txt")
@@ -285,7 +286,7 @@ def tables_to_bot(teams):   # формирование таблиц группо
 def table_group_to_bot(teams, group):   # формирование таблиц по группам для вывода в бот
     msg = ""
     msg += f'\n\n  Группа {chr(group + 64)}'
-    msg += f'\n  команды    и  в  н  п  мз  мп  о'
+    msg += f'\n  команды    и в н п мз мп о'
 
     for s in teams:
         if s[1][0] == group:
@@ -298,7 +299,7 @@ def table_group_to_bot(teams, group):   # формирование таблиц 
             g_wi = str(s[1][5]).ljust(2)
             g_lo = str(s[1][6]).ljust(2)
             sc = s[1][7]
-            msg += f'\n{pl} {te} {gm}  {wi}  {no}  {lo}  {g_wi}  {g_lo}  {sc}'
+            msg += f'\n{pl} {te} {gm} {wi} {no} {lo} {g_wi} {g_lo} {sc}'
 
     msg_to_file(msg, f"txt_table_group{str(group)}.txt")
 
@@ -354,29 +355,29 @@ def matches_final_to_bot(matches):  # формирование результа�
 
         id =str(l['id']).rjust(2)
         d = l['datetime'].rjust(13)
-        h = l['hosts'].ljust(10)
+        h = l['hosts'].rjust(10)
         g = l['guests'].ljust(10)
         inf = l['info']
         if l['played']:
             h_g = str(l['goals_hosts']).rjust(2)
-            g_g = str(l['goals_guests']).rjust(2)
+            g_g = str(l['goals_guests']).ljust(2)
             h_g_p, g_g_p = "", ""
             if l['goals_hosts'] == l['goals_guests']:
                 h_g = str(l['goals_hosts'] + l['goals_hosts_extratime']).rjust(2)
-                g_g = str(l['goals_guests'] + l['goals_guests_extratime']).rjust(2)
+                g_g = str(l['goals_guests'] + l['goals_guests_extratime']).ljust(2)
                 if l['goals_hosts'] + l['goals_hosts_extratime'] == l['goals_guests'] + l['goals_guests_extratime']:
-                    h_g_p = str(l['goals_hosts_penalty']).rjust(2)
-                    g_g_p = str(l['goals_guests_penalty']).rjust(2)
+                    h_g_p = str(l['goals_hosts_penalty'])   # .rjust(2)
+                    g_g_p = str(l['goals_guests_penalty'])  # .ljust(2)
         else:
             h_g = ' -'
-            g_g = ' -'
+            g_g = '-'
             h_g_p = ''
             g_g_p = ''
 
         if h_g_p != "":
-            msg += f"\n{id} {d} {h} - {g} {h_g} : {g_g} ({h_g_p} : {g_g_p})" # {inf}
+            msg += f"\n{id} {d} \n{h}-{g} {h_g}:{g_g}({h_g_p}:{g_g_p})" # {inf}
         else:
-            msg += f"\n{id} {d} {h} - {g} {h_g} : {g_g}"  # {inf}
+            msg += f"\n{id} {d} \n{h}-{g} {h_g}:{g_g}"  # {inf}
 
     msg_to_file(msg, "txt_matches_final.txt")
 
@@ -484,23 +485,23 @@ groups = teams_load("input_teams.txt")[1]
 matches = matches_load("input_matches.txt")
 matches_final = matches_final_load("input matches_final.txt")
 rating_fifa = rating_fifa_load("input_rating_fifa.txt")
-msg1_ratings = ratings_to_bot(rating_fifa, 50, 33)
-msg2_ratings = ratings_to_bot(rating_fifa, 100, 33)
-msg3_ratings = ratings_to_bot(rating_fifa, 150, 33)
-msg4_ratings = ratings_to_bot(rating_fifa, 200, 33)
-msg5_ratings = ratings_to_bot(rating_fifa, 250, 33)
+msg1_ratings = ratings_to_bot(rating_fifa, 50, 20)
+msg2_ratings = ratings_to_bot(rating_fifa, 100, 20)
+msg3_ratings = ratings_to_bot(rating_fifa, 150, 20)
+msg4_ratings = ratings_to_bot(rating_fifa, 200, 20)
+msg5_ratings = ratings_to_bot(rating_fifa, 250, 20)
 ratings_euro = rating_euro("input_teams.txt")
 msg_ratings_euro = ratings_to_bot(ratings_euro, 50, 14)
 tables_formation(teams, matches)
-msg_matches = matches_to_bot(matches) + separator(48)
+msg_matches = matches_to_bot(matches) + separator(28)
 group_itog = tables_sort(teams)
-msg_tables = tables_to_bot(group_itog) + separator(48)
-msg_group1 = table_group_to_bot(group_itog, 1) + '\n' + matches_group_to_bot(matches, 1) + separator(36)
-msg_group2 = table_group_to_bot(group_itog, 2) + '\n' + matches_group_to_bot(matches, 2) + separator(36)
-msg_group3 = table_group_to_bot(group_itog, 3) + '\n' + matches_group_to_bot(matches, 3) + separator(36)
-msg_group4 = table_group_to_bot(group_itog, 4) + '\n' + matches_group_to_bot(matches, 4) + separator(36)
-msg_group5 = table_group_to_bot(group_itog, 5) + '\n' + matches_group_to_bot(matches, 5) + separator(36)
-msg_group6 = table_group_to_bot(group_itog, 6) + '\n' + matches_group_to_bot(matches, 6) + separator(36)
+msg_tables = tables_to_bot(group_itog) + separator(28)
+msg_group1 = table_group_to_bot(group_itog, 1)+'\n'+matches_group_to_bot(matches, 1)+separator(28)
+msg_group2 = table_group_to_bot(group_itog, 2)+'\n'+matches_group_to_bot(matches, 2)+separator(28)
+msg_group3 = table_group_to_bot(group_itog, 3)+'\n'+matches_group_to_bot(matches, 3)+separator(28)
+msg_group4 = table_group_to_bot(group_itog, 4)+'\n'+matches_group_to_bot(matches, 4)+separator(28)
+msg_group5 = table_group_to_bot(group_itog, 5)+'\n'+matches_group_to_bot(matches, 5)+separator(28)
+msg_group6 = table_group_to_bot(group_itog, 6)+'\n'+matches_group_to_bot(matches, 6)+separator(28)
 msg_matches_final = matches_final_to_bot(matches_final)
 
 print(msg_matches)

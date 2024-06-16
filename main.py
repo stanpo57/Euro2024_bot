@@ -4,9 +4,12 @@ from aiogram import Bot, Dispatcher
 
 from app.handlers import router
 
+from config import BOT_TOKEN
+
 
 async def main():
-    bot = Bot(token='6561724098:AAG4PShVBvtFEkz1_yw30iAJJgbnApWGT6M')  # stanpo1586_bot
+    # print(BOT_TOKEN)
+    bot = Bot(token=BOT_TOKEN)  # stanpo1586_bot
     dp = Dispatcher()
     dp.include_router(router)
     logging.basicConfig(level=logging.INFO)

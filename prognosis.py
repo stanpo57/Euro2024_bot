@@ -157,8 +157,8 @@ def predict(n):     # прогноз
     ]
 
 
-# new_predict = predict(5)
-# print(new_predict[0])
-# print(new_predict[1])
-# print(new_predict[8])
-# print(new_predict[9])
+new_predict = predict(5)
+print(new_predict[0])
+print(new_predict[1])
+print(new_predict[8])
+print(new_predict[9])
