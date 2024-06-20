@@ -212,7 +212,7 @@ def tables_print(teams): # печать групповых результато�
         i += 1
 
 
-def matches_to_bot(matches):    # формирование групповых результатов для вывода в бот
+def matches_to_bot(matches, real):    # формирование групповых результатов для вывода в бот
     msg = "\n"
     for l in matches:
         id =str(l['id']).rjust(2)
@@ -228,11 +228,13 @@ def matches_to_bot(matches):    # формирование групповых р
             g_g = '-'
         msg += f"\n{id}  {d} \n{h} -{g} {h_g}:{g_g}"    # {inf}
 
-    msg_to_file(msg, "txt_matches.txt")
+    if real:
+        msg_to_file(msg, "txt_matches.txt")
+
     return msg
 
 
-def matches_group_to_bot(matches, group):   # формирование результатов матчей для группы для вывода в бот
+def matches_group_to_bot(matches, group, real):   # формирование результатов матчей для группы для вывода в бот
     msg = ""
     for l in matches:
 
@@ -253,12 +255,13 @@ def matches_group_to_bot(matches, group):   # формирование резу�
             # msg += f"\n {d} \n{h} {h_g} : {g_g} {g}"
             msg += f"\n{id}  {d} \n{h} -{g} {h_g}:{g_g}"
 
-    msg_to_file(msg, f"txt_matches_gr{str(group)}.txt")
+    if real:
+        msg_to_file(msg, f"txt_matches_gr{str(group)}.txt")
 
     return msg
 
 
-def tables_to_bot(teams):   # формирование таблиц групповых результатов для вывода в бот
+def tables_to_bot(teams, real):   # формирование таблиц групповых результатов для вывода в бот
     msg = ""
     i = 0
 
@@ -278,12 +281,13 @@ def tables_to_bot(teams):   # формирование таблиц группо
         msg += f'\n{pl} {te} {gm} {wi} {no} {lo} {g_wi} {g_lo} {sc}'
         i += 1
 
-    msg_to_file(msg, "txt_tables.txt")
+    if real:
+        msg_to_file(msg, "txt_tables.txt")
 
     return msg
 
 
-def table_group_to_bot(teams, group):   # формирование таблиц по группам для вывода в бот
+def table_group_to_bot(teams, group, real):   # формирование таблиц по группам для вывода в бот
     msg = ""
     msg += f'\n\n  Группа {chr(group + 64)}'
     msg += f'\n  команды    и в н п мз мп о'
@@ -301,7 +305,8 @@ def table_group_to_bot(teams, group):   # формирование таблиц 
             sc = s[1][7]
             msg += f'\n{pl} {te} {gm} {wi} {no} {lo} {g_wi} {g_lo} {sc}'
 
-    msg_to_file(msg, f"txt_table_group{str(group)}.txt")
+    if real:
+        msg_to_file(msg, f"txt_table_group{str(group)}.txt")
 
     return msg
 
@@ -345,7 +350,7 @@ def final_8_formation(finalists, matches_final):    # формирование �
     return matches_final
 
 
-def matches_final_to_bot(matches):  # формирование результатов финального турнира для вывода в бот
+def matches_final_to_bot(matches, real):  # формирование результатов финального турнира для вывода в бот
     f = matches_final[0]['final']
     msg = f"\n {f} финала"
     for l in matches:
@@ -379,7 +384,8 @@ def matches_final_to_bot(matches):  # формирование результа�
         else:
             msg += f"\n{id} {d} \n{h}-{g} {h_g}:{g_g}"  # {inf}
 
-    msg_to_file(msg, "txt_matches_final.txt")
+    if real:
+        msg_to_file(msg, "txt_matches_final.txt")
 
     return msg
 
@@ -463,7 +469,7 @@ def itog_formation(matches_final):  # формирование итоговой 
     return teams
 
 
-def itog_table_to_bot(teams):   # формирование итоговой таблицы для вывода в бот
+def itog_table_to_bot(teams, real):   # формирование итоговой таблицы для вывода в бот
     msg = f"\n ИТОГОВАЯ ТАБЛИЦА \n\n"
     i = 1
 
@@ -475,7 +481,8 @@ def itog_table_to_bot(teams):   # формирование итоговой та
         msg += f"{place}. {l}\n"
         i += 1
 
-    msg_to_file(msg, "txt_itog.txt")
+    if real:
+        msg_to_file(msg, "txt_itog.txt")
 
     return msg
 
@@ -493,16 +500,22 @@ msg5_ratings = ratings_to_bot(rating_fifa, 250, 20)
 ratings_euro = rating_euro("input_teams.txt")
 msg_ratings_euro = ratings_to_bot(ratings_euro, 50, 14)
 tables_formation(teams, matches)
-msg_matches = matches_to_bot(matches) + separator(28)
+msg_matches = matches_to_bot(matches, 1) + separator(28)
 group_itog = tables_sort(teams)
-msg_tables = tables_to_bot(group_itog) + separator(28)
-msg_group1 = table_group_to_bot(group_itog, 1)+'\n'+matches_group_to_bot(matches, 1)+separator(28)
-msg_group2 = table_group_to_bot(group_itog, 2)+'\n'+matches_group_to_bot(matches, 2)+separator(28)
-msg_group3 = table_group_to_bot(group_itog, 3)+'\n'+matches_group_to_bot(matches, 3)+separator(28)
-msg_group4 = table_group_to_bot(group_itog, 4)+'\n'+matches_group_to_bot(matches, 4)+separator(28)
-msg_group5 = table_group_to_bot(group_itog, 5)+'\n'+matches_group_to_bot(matches, 5)+separator(28)
-msg_group6 = table_group_to_bot(group_itog, 6)+'\n'+matches_group_to_bot(matches, 6)+separator(28)
-msg_matches_final = matches_final_to_bot(matches_final)
+msg_tables = tables_to_bot(group_itog, 1) + separator(28)
+msg_group1 = (table_group_to_bot(group_itog, 1, 1)+'\n'+
+              matches_group_to_bot(matches, 1, 1)+separator(28))
+msg_group2 = (table_group_to_bot(group_itog, 2, 1)+'\n'+
+              matches_group_to_bot(matches, 2, 1)+separator(28))
+msg_group3 = (table_group_to_bot(group_itog, 3, 1)+'\n'+
+              matches_group_to_bot(matches, 3, 1)+separator(28))
+msg_group4 = (table_group_to_bot(group_itog, 4, 1)+'\n'+
+              matches_group_to_bot(matches, 4, 1)+separator(28))
+msg_group5 = (table_group_to_bot(group_itog, 5, 1)+'\n'+
+              matches_group_to_bot(matches, 5, 1)+separator(28))
+msg_group6 = (table_group_to_bot(group_itog, 6, 1)+'\n'+
+              matches_group_to_bot(matches, 6, 1)+separator(28))
+msg_matches_final = matches_final_to_bot(matches_final, 1)
 
 print(msg_matches)
 print(msg_tables)
@@ -512,11 +525,11 @@ print(msg_group3)
 print(msg_group4)
 print(msg_group5)
 print(msg_group6)
-print(msg1_ratings)
-print(msg2_ratings)
-print(msg3_ratings)
-print(msg4_ratings)
-print(msg5_ratings)
+# print(msg1_ratings)
+# print(msg2_ratings)
+# print(msg3_ratings)
+# print(msg4_ratings)
+# print(msg5_ratings)
 print(msg_ratings_euro)
 
 # i = 0

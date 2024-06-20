@@ -113,15 +113,21 @@ def predict(n):     # прогноз
     matches_final_predict = matches_final.copy()
     matches_formation_predict(matches_predict)
     tables_formation(teams_predict, matches_predict)
-    msg_matches_predict = matches_to_bot(matches_predict) + separator(n)
+    msg_matches_predict = matches_to_bot(matches_predict, 0) + separator(n)
     group_itog_predict = tables_sort(teams_predict)
-    msg_tables_predict = tables_to_bot(group_itog_predict) + separator(n)
-    msg_group1_predict = matches_group_to_bot(matches_predict, 1) + table_group_to_bot(group_itog_predict, 1) + separator(n)
-    msg_group2_predict = matches_group_to_bot(matches_predict, 2) + table_group_to_bot(group_itog_predict, 2) + separator(n)
-    msg_group3_predict = matches_group_to_bot(matches_predict, 3) + table_group_to_bot(group_itog_predict, 3) + separator(n)
-    msg_group4_predict = matches_group_to_bot(matches_predict, 4) + table_group_to_bot(group_itog_predict, 4) + separator(n)
-    msg_group5_predict = matches_group_to_bot(matches_predict, 5) + table_group_to_bot(group_itog_predict, 5) + separator(n)
-    msg_group6_predict = matches_group_to_bot(matches_predict, 5) + table_group_to_bot(group_itog_predict, 6) + separator(n)
+    msg_tables_predict = tables_to_bot(group_itog_predict, 0) + separator(n)
+    msg_group1_predict = (matches_group_to_bot(matches_predict, 1, 0) +
+                          table_group_to_bot(group_itog_predict, 1, 0) + separator(n))
+    msg_group2_predict = (matches_group_to_bot(matches_predict, 2, 0) +
+                          table_group_to_bot(group_itog_predict, 2, 0) + separator(n))
+    msg_group3_predict = (matches_group_to_bot(matches_predict, 3, 0) +
+                          table_group_to_bot(group_itog_predict, 3, 0) + separator(n))
+    msg_group4_predict = (matches_group_to_bot(matches_predict, 4, 0) +
+                          table_group_to_bot(group_itog_predict, 4, 0) + separator(n))
+    msg_group5_predict = (matches_group_to_bot(matches_predict, 5, 0) +
+                          table_group_to_bot(group_itog_predict, 5, 0) + separator(n))
+    msg_group6_predict = (matches_group_to_bot(matches_predict, 5, 0) +
+                          table_group_to_bot(group_itog_predict, 6, 0) + separator(n))
     finalists_predict = finalists_from_group(group_itog_predict)
     # 1/8 финала
     matches_final_predict = final_8_formation(finalists_predict, matches_final_predict)
@@ -140,8 +146,8 @@ def predict(n):     # прогноз
     matches_final_predict = final_formation_predict(matches_final_predict, '1/1')
     # итоговая таблица
     itog_table_predict = itog_formation(matches_final_predict)
-    msg_final_predict = matches_final_to_bot(matches_final_predict)
-    msg_itog_table_predict = itog_table_to_bot(itog_table_predict)
+    msg_final_predict = matches_final_to_bot(matches_final_predict, 0)
+    msg_itog_table_predict = itog_table_to_bot(itog_table_predict, 0)
 
     return [
         msg_matches_predict,
@@ -157,8 +163,13 @@ def predict(n):     # прогноз
     ]
 
 
-new_predict = predict(5)
-print(new_predict[0])
-print(new_predict[1])
-print(new_predict[8])
-print(new_predict[9])
+n = randint(15, 20)
+new_predict = predict(n)
+msg_predict = new_predict[0] + new_predict[1] + "\n" + new_predict[8] + "\n" + new_predict[9]
+file_name = f"predicts/txt_predict_{str(randint(100000, 999999))}.txt"
+msg_to_file(msg_predict, file_name)
+
+# print(new_predict[0])
+# print(new_predict[1])
+# print(new_predict[8])
+# print(new_predict[9])
