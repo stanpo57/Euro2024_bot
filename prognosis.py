@@ -169,7 +169,7 @@ msg_predict = new_predict[0] + new_predict[1] + "\n" + new_predict[8] + "\n" + n
 file_name = f"predicts/txt_predict_{str(randint(100000, 999999))}.txt"
 msg_to_file(msg_predict, file_name)
 
-# print(new_predict[0])
-# print(new_predict[1])
-# print(new_predict[8])
-# print(new_predict[9])
+print(new_predict[0])
+print(new_predict[1])
+print(new_predict[8])
+print(new_predict[9])
