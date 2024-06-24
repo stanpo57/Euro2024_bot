@@ -2,6 +2,8 @@ from aiogram import F, Router, types
 from aiogram.types import Message, CallbackQuery
 from aiogram.filters import CommandStart, Command
 # from random import randint
+from pprint import pprint
+import re
 
 import app.keyboards as kb
 
@@ -172,7 +174,7 @@ async def ratings(message: Message):
 
 
 @router.message(F.text == kb.kb_ratings_list[0])     # Рейтинги участников ЧЕ2024
-async def table_f(message: Message):
+async def table_fifa(message: Message):
     txt = eu.msg_ratings_euro
     entity_mono = types.MessageEntity(
         type="code",
@@ -193,9 +195,9 @@ async def predicts(message: Message):
     matches_formation_predict(matches_predict)
     # predicts.matches_formation_predict(matches_predict)
     eu.tables_formation(teams_predict, matches_predict)
-    msg_matches_predict = eu.matches_to_bot(matches_predict) + eu.separator(33)
+    msg_matches_predict = eu.matches_to_bot(matches_predict, 0) + eu.separator(28)
     group_itog_predict = eu.tables_sort(teams_predict)
-    msg_tables_predict = eu.tables_to_bot(group_itog_predict) + eu.separator(33)
+    msg_tables_predict = eu.tables_to_bot(group_itog_predict, 0) + eu.separator(28)
     # msg_group1_predict = (eu.matches_group_to_bot(matches_predict, 1) +
     #                       eu.table_group_to_bot(group_itog_predict, 1) + eu.separator(33))
     # msg_group2_predict = (eu.matches_group_to_bot(matches_predict, 2) +
@@ -226,33 +228,9 @@ async def predicts(message: Message):
     matches_final_predict = final_formation_predict(matches_final_predict, '1/1')
     # итоговая таблица
     itog_table_predict = eu.itog_formation(matches_final_predict)
-    msg_final_predict = eu.matches_final_to_bot(matches_final_predict)
-    msg_itog_table_predict = eu.itog_table_to_bot(itog_table_predict)
+    msg_final_predict = eu.matches_final_to_bot(matches_final_predict, 0)
+    msg_itog_table_predict = eu.itog_table_to_bot(itog_table_predict,0)
 
-
-    # return [
-    #     msg_matches_predict,
-    #     msg_tables_predict,
-    #     msg_group1_predict,
-    #     msg_group2_predict,
-    #     msg_group3_predict,
-    #     msg_group4_predict,
-    #     msg_group5_predict,
-    #     msg_group6_predict,
-    #     msg_final_predict,
-    #     msg_itog_table_predict
-    # ]
-
-    # вывод в бот
-
-
-
-
-    #
-    #
-    # n = randint(40, 50)
-    # # predict(n)
-    # predict_to_bot = predict(n)
     txt1 = msg_matches_predict
     txt2 = msg_tables_predict
     txt3 = msg_final_predict
@@ -272,22 +250,71 @@ async def predicts(message: Message):
     await message.answer(text=txt4, entities=entities)
 
 
-'''
-@router.callback_query(F.data == "t-shirts")
-async def t_shirts(callback: CallbackQuery):
-    await callback.answer("You have selected the category", show_alert=True)    # , show_alert=True
-    await callback.message.answer("You have selected the t-shirts category")
+@router.message()   # Вывод информации про матч по его номеру
+async def match_info(message: Message):
+    matches_groups = eu.matches
+    # pprint(matches_groups)
+    matches_finals = eu.matches_final
+    # pprint(matches_finals)
+
+    try:
+       match_num = int(message.text)
+    except ValueError:
+        await message.answer(
+            text="Введите номер матча:",
+            reply_markup=kb.kb_main
+        )
+        return
+
+    match_info = eu.match_info_to_bot(matches_groups, matches_finals, match_num)
+
+    # if match_info_groups:
+    #     txt = match_info_groups
+    # else:
+    #     match_info_finals = eu.match_info_to_bot(matches_finals, match_num)
+    if match_info:
+        txt = match_info
+    else:
+        txt = "                    \nМатч с таким номером отсутствует!  "
+        # match_info_finals = eu.match_info_to_bot(matches_finals, match_num)
+
+    entity_mono = types.MessageEntity(      # Моноширинный шрифт
+        type="code",
+        offset=0,
+        length=len(txt),
+    )
+    entity_bold = types.MessageEntity(      # Жирный
+        type="bold",
+        offset=0,
+        length=55,
+    )
+    entity_italic = types.MessageEntity(    # Курсив
+        type="italic",
+        offset=0,
+        length=20,
+    )
+    entity_underline = types.MessageEntity(  # Подчеркивание
+        type="underline",
+        offset=0,
+        length=20,
+    )
+    entities = [
+        entity_bold,
+        entity_italic,
+        entity_underline,
+    ]
+    await message.answer(
+        text=txt,
+        entities=entities,
+        reply_markup=kb.kb_main
+    )
+    # await message.answer('\nДля выбора группы нажмите соответствующую кнопку:')
 
 
-@router.callback_query(F.data == "sneakers")
-async def sneakers(callback: CallbackQuery):
-    await callback.answer("You have selected the category", show_alert=True)    # show_alert=True
-    await callback.message.answer("You have selected the sneakers category")
+    @router.message()   # Ввод чего попало
+    async def not_define(message: Message):
+        await message.answer(
+            text="Не понял...",
+            reply_markup=kb.kb_main
+        )
 
-
-@router.callback_query(F.data == "caps")
-async def caps(callback: CallbackQuery):
-    await callback.answer("You have selected the category", show_alert=True)    # show_alert=True
-    await callback.message.answer("You have selected the caps category")
-    
-    '''
