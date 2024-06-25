@@ -1,5 +1,5 @@
 import re
-from pprint import pprint
+# from pprint import pprint
 
 
 def teams_load(file):   # загрузка списка команд и списка групп из файла
@@ -311,75 +311,6 @@ def table_group_to_bot(teams, group, real):   # формирование таб�
     return msg
 
 
-def matches_num_dict(matches_groups, matches_finals):
-    num_dict = {}
-    for i in range(len(matches_groups)):
-        num_dict[matches_groups[i]["id"]] = [1,i]
-
-    for i in range(len(matches_finals)):
-        num_dict[matches_finals[i]["id"]] = [2,i]
-
-    return num_dict
-
-
-def match_info_to_bot(matches_groups, matches_finals, match_num: int):  # формирование детальной информации матча для вывода в бот
-    match_inds = matches_num_dict(matches, matches_final)
-
-    if match_num in match_inds:
-        match_ind = match_inds[match_num][1]
-
-        if match_inds[match_num][0] == 1:
-            id = str(matches_groups[match_ind]['id']).rjust(2)
-            d = matches_groups[match_ind]['datetime'].rjust(13)
-            h = matches_groups[match_ind]['hosts']
-            g = matches_groups[match_ind]['guests']
-            inf = matches_groups[match_ind]['info']
-
-            if matches_groups[match_ind]['played'] == 1:
-                h_g = str(matches_groups[match_ind]['goals_hosts']).rjust(2)
-                g_g = str(matches_groups[match_ind]['goals_guests']).ljust(2)
-            else:
-                h_g = '- '
-                g_g = ' -'
-
-            result = f"{h} - {g}  {h_g}:{g_g}".ljust(35)
-            msg = f"\n<{id}>  {d} \n{result} \n\n{inf}"
-
-            return msg
-
-        else:
-            id = str(matches_finals[match_ind]['id']).rjust(2)
-            d = matches_finals[match_ind]['datetime'].rjust(13)
-            h = matches_finals[match_ind]['hosts']
-            g = matches_finals[match_ind]['guests']
-            inf = matches_finals[match_ind]['info']
-
-            if matches_finals[match_ind]['played'] == 1:
-                h_g = str(matches_finals[match_ind]['goals_hosts']).rjust(2)
-                g_g = str(matches_finals[match_ind]['goals_guests']).ljust(2)
-                h_g_p = g_g_p = "   "
-
-                if int(h_g) == int(g_g):
-                    h_g = str(int(h_g) + matches_finals[match_ind]['goals_hosts_extratime']).rjust(2)
-                    g_g = str(int(g_g) + matches_finals[match_ind]['goals_guests_extratime']).ljust(2)
-
-                    if int(h_g) == int(g_g):
-                        h_g_p = "(" +str(matches_finals[match_ind]['goals_hosts_penalty']) + ":"
-                        g_g_p = str(matches_finals[match_ind]['goals_guests_penalty']) + ")"
-
-            else:
-                h_g = '- '
-                g_g = ' -'
-
-            result = f"{h} - {g}  {h_g}:{g_g} {h_g_p}{g_g_p}".ljust(35)
-            msg = f"\n<{id}>  {d} \n{result} \n\n{inf}"
-
-            return msg
-
-    else:
-        return False
-
-
 def separator(n):   # разделитель
     msg = f"\n{'-' * n}"
 
@@ -586,24 +517,20 @@ msg_group6 = (table_group_to_bot(group_itog, 6, 1)+'\n'+
               matches_group_to_bot(matches, 6, 1)+separator(28))
 msg_matches_final = matches_final_to_bot(matches_final, 1)
 
-# print(msg_matches)
-# print(msg_tables)
-# print(msg_group1)
-# print(msg_group2)
-# print(msg_group3)
-# print(msg_group4)
-# print(msg_group5)
-# print(msg_group6)
-# # print(msg1_ratings)
-# # print(msg2_ratings)
-# # print(msg3_ratings)
-# # print(msg4_ratings)
-# # print(msg5_ratings)
-# print(msg_ratings_euro)
-
-# pprint(matches)
-# pprint(matches_final)
-# print(match_info_to_bot(matches_final, 47))
+print(msg_matches)
+print(msg_tables)
+print(msg_group1)
+print(msg_group2)
+print(msg_group3)
+print(msg_group4)
+print(msg_group5)
+print(msg_group6)
+# print(msg1_ratings)
+# print(msg2_ratings)
+# print(msg3_ratings)
+# print(msg4_ratings)
+# print(msg5_ratings)
+print(msg_ratings_euro)
 
 # i = 0
 # n = 3
@@ -625,9 +552,4 @@ msg_matches_final = matches_final_to_bot(matches_final, 1)
 # pprint(rating_fifa)
 # pprint(ratings_euro)
 # print(msg_ratings_euro)
-# pprint(matches)
-#
-# match_ind = matches_num_dict(matches, matches_final)
-# pprint(match_ind)
-
 
