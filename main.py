@@ -4,10 +4,9 @@ from aiogram import Bot, Dispatcher
 
 from app.handlers import router
 
-# from config import BOT_TOKEN
-
 
 BOT_TOKEN = input("\n\nEnter BOT_TOKEN: ")
+
 
 async def main():
     # print(BOT_TOKEN)
@@ -25,4 +24,3 @@ if __name__ == '__main__':
         asyncio.run(main())
     except KeyboardInterrupt:
         print("Bot is off!")
-

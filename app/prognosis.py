@@ -1,34 +1,34 @@
 from random import random, randint
 
-from euro2024 import (
+from app.euro2024 import (
     rating_fifa, teams, matches, matches_final, tables_formation, matches_to_bot, separator,
     tables_sort, tables_to_bot, matches_group_to_bot, table_group_to_bot, finalists_from_group, final_8_formation,
     finalists_from_finals, final_4_formation, final_2_formation, final_1_formation, itog_formation,
-    matches_final_to_bot, itog_table_to_bot, msg_to_file,
+    matches_final_to_bot, itog_table_to_bot,
+    # msg_to_file,
 )
 
 
-def matches_predict_random(matches):    # рандомное формирование результатов матчей в группах
-    for i in range(len(matches)):
-        if not matches[i]["played"]:
-            matches[i]["goals_hosts"] = randint(0, 3)
-            matches[i]["goals_guests"] = randint(0, 3)
-            matches[i]["played"] = 1
+def matches_predict_random(matches_gr):    # рандомное формирование результатов матчей в группах
+    for i in range(len(matches_gr)):
+        if not matches_gr[i]["played"]:
+            matches_gr[i]["goals_hosts"] = randint(0, 3)
+            matches_gr[i]["goals_guests"] = randint(0, 3)
+            matches_gr[i]["played"] = 1
 
-    return matches
+    return matches_gr
 
 
 def match_predict(team1, team2):    # формирование прогноза результата матча с учетом рейтинга
     goals_per_match = random() * 5
     random_ratio = 0.2
-    # result = [0, 0]
     ratings = [rating_fifa[team1], rating_fifa[team2]]
     result = [ratings[0]/(ratings[0] + ratings[1]),
               ratings[1]/(ratings[0] + ratings[1])]
     randoms = [random() * random_ratio, random() * random_ratio]
     l1 = f"t1 - {team1}, t2 - {team2}; ratings - {ratings}, g_p_m - {goals_per_match}, result - {result}"
     result = [result[0]*randoms[0]/(result[0]*randoms[0]+result[1]*randoms[1]),
-            result[1] * randoms[1]/(result[0]*randoms[0]+result[1]*randoms[1])]
+              result[1] * randoms[1]/(result[0]*randoms[0]+result[1]*randoms[1])]
     result = [round(result[0] * goals_per_match),
               round(result[1] * goals_per_match)]
     l2 = f"randoms - {randoms}, result - {result}"
@@ -39,15 +39,15 @@ def match_predict(team1, team2):    # формирование прогноза 
     return result
 
 
-def matches_formation_predict(matches):     # формирование прогноза результатов матчей в группах
-    for i in range(len(matches)):
-        if not matches[i]["played"]:
-            result = match_predict(matches[i]["hosts"], matches[i]["guests"])
-            matches[i]["goals_hosts"] = result[0]
-            matches[i]["goals_guests"] = result[1]
-            matches[i]["played"] = 1
+def matches_formation_predict(matches_gr):     # формирование прогноза результатов матчей в группах
+    for i in range(len(matches_gr)):
+        if not matches_gr[i]["played"]:
+            result = match_predict(matches_gr[i]["hosts"], matches_gr[i]["guests"])
+            matches_gr[i]["goals_hosts"] = result[0]
+            matches_gr[i]["goals_guests"] = result[1]
+            matches_gr[i]["played"] = 1
 
-    return matches
+    return matches_gr
 
 
 def penalty_predict():  # прогноз пробития пенальти
@@ -82,29 +82,29 @@ def penalty_predict():  # прогноз пробития пенальти
     return goals
 
 
-def final_formation_predict(matches_final, final):  # прогноз результата матча финального турнира
-    for l in matches_final:
-        if l["final"] == final and not l["played"]:
-            result = match_predict(l["hosts"], l["guests"])
-            l["goals_hosts"] = result[0]
-            l["goals_guests"] = result[1]
-            g_h = l["goals_hosts"]
-            g_g = l["goals_guests"]
+def final_formation_predict(matches_fin, final):  # прогноз результата матча финального турнира
+    for s in matches_fin:
+        if s["final"] == final and not s["played"]:
+            result = match_predict(s["hosts"], s["guests"])
+            s["goals_hosts"] = result[0]
+            s["goals_guests"] = result[1]
+            g_h = s["goals_hosts"]
+            g_g = s["goals_guests"]
 
             if result[0] == result[1]:
-                l["goals_hosts_extratime"] = randint(0, 2)
-                l["goals_guests_extratime"] = randint(0, 2)
-                g_h += l["goals_hosts_extratime"]
-                g_g += l["goals_guests_extratime"]
+                s["goals_hosts_extratime"] = randint(0, 2)
+                s["goals_guests_extratime"] = randint(0, 2)
+                g_h += s["goals_hosts_extratime"]
+                g_g += s["goals_guests_extratime"]
 
             if g_h == g_g:
                 result_penalty = penalty_predict()
-                l["goals_hosts_penalty"] = result_penalty[0]
-                l["goals_guests_penalty"] = result_penalty[1]
+                s["goals_hosts_penalty"] = result_penalty[0]
+                s["goals_guests_penalty"] = result_penalty[1]
 
-            l["played"] = 1
+            s["played"] = 1
 
-    return matches_final
+    return matches_fin
 
 
 def predict(n):     # прогноз
@@ -163,13 +163,3 @@ def predict(n):     # прогноз
     ]
 
 
-n = randint(15, 20)
-new_predict = predict(n)
-msg_predict = new_predict[0] + new_predict[1] + "\n" + new_predict[8] + "\n" + new_predict[9]
-file_name = f"predicts/txt_predict_{str(randint(100000, 999999))}.txt"
-msg_to_file(msg_predict, file_name)
-
-print(new_predict[0])
-print(new_predict[1])
-print(new_predict[8])
-print(new_predict[9])
